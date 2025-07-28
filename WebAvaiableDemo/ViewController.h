@@ -10,11 +10,5 @@
 
 @interface ViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UITextField *urlTextField;
-@property (weak, nonatomic) IBOutlet UIButton *loadButton;
-@property (weak, nonatomic) IBOutlet WKWebView *webView;
-
-- (IBAction)loadButtonTapped:(id)sender;
-
 @end
 
