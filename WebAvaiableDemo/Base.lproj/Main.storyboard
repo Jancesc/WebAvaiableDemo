@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="WebKit framework" minToolsVersion="11.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="urlTextField">
+                                <rect key="frame" x="20" y="59" width="335" height="34"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="URL" autocorrectionType="no" autocapitalizationType="none"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="loadButton">
+                                <rect key="frame" x="20" y="113" width="335" height="40"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="buttonHeight"/>
+                                </constraints>
+                                <state key="normal" title="Load Webpage"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Load Webpage"/>
+                                <connections>
+                                    <action selector="loadButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="loadButtonAction"/>
+                                </connections>
+                            </button>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="webView">
+                                <rect key="frame" x="0.0" y="173" width="375" height="494"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="urlTextField" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="urlTextFieldLeading"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="urlTextField" secondAttribute="trailing" constant="20" id="urlTextFieldTrailing"/>
+                            <constraint firstItem="urlTextField" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="urlTextFieldTop"/>
+                            <constraint firstItem="loadButton" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="loadButtonLeading"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="loadButton" secondAttribute="trailing" constant="20" id="loadButtonTrailing"/>
+                            <constraint firstItem="loadButton" firstAttribute="top" secondItem="urlTextField" secondAttribute="bottom" constant="20" id="loadButtonTop"/>
+                            <constraint firstItem="webView" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="webViewLeading"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="webView" secondAttribute="trailing" id="webViewTrailing"/>
+                            <constraint firstItem="webView" firstAttribute="top" secondItem="loadButton" secondAttribute="bottom" constant="20" id="webViewTop"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="webView" secondAttribute="bottom" id="webViewBottom"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="loadButton" destination="loadButton" id="loadButtonOutlet"/>
+                        <outlet property="urlTextField" destination="urlTextField" id="urlTextFieldOutlet"/>
+                        <outlet property="webView" destination="webView" id="webViewOutlet"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139" y="144"/>
+        </scene>
+    </scenes>
+</document>
