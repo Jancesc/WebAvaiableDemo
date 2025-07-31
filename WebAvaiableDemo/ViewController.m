@@ -6,12 +6,11 @@
 //
 
 #import "ViewController.h"
-
-@interface ViewController () <WKNavigationDelegate, UITextFieldDelegate>
+#import "WebViewViewController.h"
+@interface ViewController ()
 
 @property (nonatomic, strong) UITextField *urlTextField;
 @property (nonatomic, strong) UIButton *loadButton;
-@property (nonatomic, strong) WKWebView *webView;
 
 @end
 
@@ -29,7 +28,9 @@
     // 设置约束
     [self setupConstraints];
 }
-
+- (BOOL)prefersStatusBarHidden {
+    return  YES;
+}
 - (void)setupUI {
     // 创建URL输入框
     self.urlTextField = [[UITextField alloc] init];
@@ -41,6 +42,7 @@
     self.urlTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.urlTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.urlTextField.delegate = self;
+//    self.urlTextField.text = @"http://xtweb.kkxgame.cn/games/EP94R3LtEEmTt2XE/index.html?c=0&v=1";
     [self.view addSubview:self.urlTextField];
     
     // 创建加载按钮
@@ -54,13 +56,7 @@
     [self.loadButton addTarget:self action:@selector(loadButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loadButton];
     
-    // 创建WebView
-    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.webView.navigationDelegate = self;
-    self.webView.backgroundColor = [UIColor systemBackgroundColor];
-    [self.view addSubview:self.webView];
+
 }
 
 - (void)setupConstraints {
@@ -80,13 +76,7 @@
         [self.loadButton.heightAnchor constraintEqualToConstant:44]
     ]];
     
-    // WebView约束
-    [NSLayoutConstraint activateConstraints:@[
-        [self.webView.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
-        [self.webView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
-        [self.webView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-        [self.webView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
-    ]];
+
 }
 
 - (void)loadButtonTapped:(id)sender {
@@ -108,20 +98,12 @@
     }
     
     // 创建NSURL对象
-    NSURL *url = [NSURL URLWithString:urlString];
     
-    // 验证URL是否有效
-    if (!url) {
-        [self showAlertWithTitle:@"Invalid URL" message:@"Please enter a valid URL"];
-        return;
-    }
-    
-    // 创建URL请求并加载
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:request];
-    
-    // 隐藏键盘
-    [self.urlTextField resignFirstResponder];
+
+    WebViewViewController *vc = [WebViewViewController new];
+    vc.url = urlString;
+    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
+   
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
@@ -135,34 +117,6 @@
     [alert addAction:okAction];
     
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-#pragma mark - WKNavigationDelegate
-
-- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    // 网页开始加载时的处理
-    [self.loadButton setTitle:@"Loading..." forState:UIControlStateNormal];
-    self.loadButton.enabled = NO;
-}
-
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    // 网页加载完成时的处理
-    [self.loadButton setTitle:@"Load Webpage" forState:UIControlStateNormal];
-    self.loadButton.enabled = YES;
-}
-
-- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    // 网页加载失败时的处理
-    [self.loadButton setTitle:@"Load Webpage" forState:UIControlStateNormal];
-    self.loadButton.enabled = YES;
-    [self showAlertWithTitle:@"Load Failed" message:[NSString stringWithFormat:@"Failed to load webpage: %@", error.localizedDescription]];
-}
-
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self loadWebpage];
-    return YES;
 }
 
 @end
