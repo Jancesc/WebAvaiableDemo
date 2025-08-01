@@ -7,7 +7,8 @@
 
 #import "ViewController.h"
 #import "WebViewViewController.h"
-@interface ViewController ()
+
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *urlTextField;
 @property (nonatomic, strong) UIButton *loadButton;
@@ -15,12 +16,19 @@
 @property (nonatomic, strong) UISwitch *ProdductionSwitch;
 @property (nonatomic, strong) UILabel *vipDescriptionLabel;
 @property (nonatomic, strong) UILabel *ProdductionDescriptionLabel;
+@property (nonatomic, strong) UITableView *historyTableView;
+@property (nonatomic, strong) UILabel *historyLabel;
+@property (nonatomic, strong) NSMutableArray *historyArray;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // 初始化历史记录数组
+    self.historyArray = [NSMutableArray array];
     
     // 设置视图背景色
     self.view.backgroundColor = [UIColor systemBackgroundColor];
@@ -30,10 +38,15 @@
     
     // 设置约束
     [self setupConstraints];
+    
+    // 加载历史记录
+    [self loadHistory];
 }
+
 - (BOOL)prefersStatusBarHidden {
     return  YES;
 }
+
 - (void)setupUI {
     // 创建URL输入框
     self.urlTextField = [[UITextField alloc] init];
@@ -80,6 +93,24 @@
     self.ProdductionDescriptionLabel.text = @"生产环境(默认)";      
     [self.view addSubview:self.ProdductionDescriptionLabel];
     
+    // 创建历史记录标签
+    self.historyLabel = [[UILabel alloc] init];
+    self.historyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.historyLabel.text = @"历史记录";
+    self.historyLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    [self.view addSubview:self.historyLabel];
+    
+    // 创建历史记录表格
+    self.historyTableView = [[UITableView alloc] init];
+    self.historyTableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.historyTableView.delegate = self;
+    self.historyTableView.dataSource = self;
+    self.historyTableView.backgroundColor = [UIColor systemBackgroundColor];
+    self.historyTableView.layer.cornerRadius = 8;
+    self.historyTableView.layer.borderWidth = 1;
+    self.historyTableView.layer.borderColor = [UIColor systemGray4Color].CGColor;
+    [self.historyTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"HistoryCell"];
+    [self.view addSubview:self.historyTableView];
 }
 
 - (void)setupConstraints {
@@ -98,29 +129,45 @@
         [self.loadButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
         [self.loadButton.heightAnchor constraintEqualToConstant:44]
     ]];
+    
     // VIP描述标签约束
     [NSLayoutConstraint activateConstraints:@[
         [self.vipDescriptionLabel.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
         [self.vipDescriptionLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20]
     ]];
+    
     // VIP开关约束
     [NSLayoutConstraint activateConstraints:@[
         [self.vipSwitch.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
         [self.vipSwitch.leadingAnchor constraintEqualToAnchor:self.vipDescriptionLabel.trailingAnchor constant:20]
     ]];
+    
     // 生产环境描述标签约束
     [NSLayoutConstraint activateConstraints:@[
         [self.ProdductionDescriptionLabel.topAnchor constraintEqualToAnchor:self.vipDescriptionLabel.bottomAnchor constant:20],
         [self.ProdductionDescriptionLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20]
     ]];
+    
     // 生产环境开关约束
     [NSLayoutConstraint activateConstraints:@[
         [self.ProdductionSwitch.topAnchor constraintEqualToAnchor:self.vipDescriptionLabel.bottomAnchor constant:20],
         [self.ProdductionSwitch.leadingAnchor constraintEqualToAnchor:self.ProdductionDescriptionLabel.trailingAnchor constant:20]
     ]];
     
-
-
+    // 历史记录标签约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.historyLabel.topAnchor constraintEqualToAnchor:self.ProdductionDescriptionLabel.bottomAnchor constant:20],
+        [self.historyLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
+        [self.historyLabel.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20]
+    ]];
+    
+    // 历史记录表格约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.historyTableView.topAnchor constraintEqualToAnchor:self.historyLabel.bottomAnchor constant:10],
+        [self.historyTableView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
+        [self.historyTableView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
+        [self.historyTableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-20]
+    ]];
 }
 
 - (void)loadButtonTapped:(id)sender {
@@ -129,6 +176,12 @@
 
 - (void)loadWebpage {
     NSString *urlString = self.urlTextField.text;
+    
+    // 检查URL是否为空
+    if (urlString.length == 0) {
+        [self showAlertWithTitle:@"Error" message:@"Please enter a URL"];
+        return;
+    }
     
     NSMutableString *stringM = [NSMutableString stringWithString:urlString];
     if ([stringM containsString:@"?"]) {
@@ -148,14 +201,120 @@
         [stringM appendString:@"&v=0"];
     }
     
-    // 创建NSURL对象
+    // 保存到历史记录
+    [self saveToHistory:urlString];
     
-
     WebViewViewController *vc = [WebViewViewController new];
     vc.url = [stringM copy];
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-   
 }
 
+- (void)saveToHistory:(NSString *)urlString {
+    // 检查是否已存在
+    if (![self.historyArray containsObject:urlString]) {
+        [self.historyArray insertObject:urlString atIndex:0];
+        
+        // 限制历史记录数量为20条
+        if (self.historyArray.count > 20) {
+            [self.historyArray removeLastObject];
+        }
+        
+        // 保存到本地
+        [self saveHistory];
+        
+        // 刷新表格
+        [self.historyTableView reloadData];
+    }
+}
+
+- (void)loadHistory {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *savedHistory = [defaults objectForKey:@"WebHistory"];
+    if (savedHistory) {
+        self.historyArray = [savedHistory mutableCopy];
+        [self.historyTableView reloadData];
+    }
+}
+
+- (void)saveHistory {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:self.historyArray forKey:@"WebHistory"];
+    [defaults synchronize];
+}
+
+- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:nil];
+    [alert addAction:okAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.historyArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryCell" forIndexPath:indexPath];
+    
+    NSString *urlString = self.historyArray[indexPath.row];
+    
+    // 提取域名作为显示名称
+    NSString *displayName = [self extractDomainFromURL:urlString];
+    cell.textLabel.text = displayName;
+    cell.textLabel.font = [UIFont systemFontOfSize:14];
+    cell.textLabel.numberOfLines = 2;
+    
+    // 显示完整URL作为副标题
+    cell.detailTextLabel.text = urlString;
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+    cell.detailTextLabel.textColor = [UIColor systemGrayColor];
+    cell.detailTextLabel.numberOfLines = 1;
+    
+    return cell;
+}
+
+- (NSString *)extractDomainFromURL:(NSString *)urlString {
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (url && url.host) {
+        return url.host;
+    }
+    return urlString;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSString *selectedURL = self.historyArray[indexPath.row];
+    self.urlTextField.text = selectedURL;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.historyArray removeObjectAtIndex:indexPath.row];
+        [self saveHistory];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self loadWebpage];
+    return YES;
+}
 
 @end
