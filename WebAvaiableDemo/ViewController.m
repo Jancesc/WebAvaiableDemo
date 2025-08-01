@@ -11,7 +11,10 @@
 
 @property (nonatomic, strong) UITextField *urlTextField;
 @property (nonatomic, strong) UIButton *loadButton;
-
+@property (nonatomic, strong) UISwitch *vipSwitch;
+@property (nonatomic, strong) UISwitch *ProdductionSwitch;
+@property (nonatomic, strong) UILabel *vipDescriptionLabel;
+@property (nonatomic, strong) UILabel *ProdductionDescriptionLabel;
 @end
 
 @implementation ViewController
@@ -42,7 +45,6 @@
     self.urlTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.urlTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.urlTextField.delegate = self;
-//    self.urlTextField.text = @"http://xtweb.kkxgame.cn/games/EP94R3LtEEmTt2XE/index.html?c=0&v=1";
     [self.view addSubview:self.urlTextField];
     
     // 创建加载按钮
@@ -56,7 +58,28 @@
     [self.loadButton addTarget:self action:@selector(loadButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loadButton];
     
-
+    // 创建VIP开关
+    self.vipSwitch = [[UISwitch alloc] init];
+    self.vipSwitch.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.vipSwitch];
+    
+    // 创建生产环境开关
+    self.ProdductionSwitch = [[UISwitch alloc] init];
+    self.ProdductionSwitch.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.ProdductionSwitch];
+    
+    // 创建VIP描述标签
+    self.vipDescriptionLabel = [[UILabel alloc] init];
+    self.vipDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.vipDescriptionLabel.text = @"VIP环境";
+    [self.view addSubview:self.vipDescriptionLabel];
+    
+    // 创建生产环境描述标签
+    self.ProdductionDescriptionLabel = [[UILabel alloc] init];
+    self.ProdductionDescriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.ProdductionDescriptionLabel.text = @"生产环境(默认)";      
+    [self.view addSubview:self.ProdductionDescriptionLabel];
+    
 }
 
 - (void)setupConstraints {
@@ -75,7 +98,28 @@
         [self.loadButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
         [self.loadButton.heightAnchor constraintEqualToConstant:44]
     ]];
+    // VIP描述标签约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.vipDescriptionLabel.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
+        [self.vipDescriptionLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20]
+    ]];
+    // VIP开关约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.vipSwitch.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
+        [self.vipSwitch.leadingAnchor constraintEqualToAnchor:self.vipDescriptionLabel.trailingAnchor constant:20]
+    ]];
+    // 生产环境描述标签约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.ProdductionDescriptionLabel.topAnchor constraintEqualToAnchor:self.vipDescriptionLabel.bottomAnchor constant:20],
+        [self.ProdductionDescriptionLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20]
+    ]];
+    // 生产环境开关约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.ProdductionSwitch.topAnchor constraintEqualToAnchor:self.vipDescriptionLabel.bottomAnchor constant:20],
+        [self.ProdductionSwitch.leadingAnchor constraintEqualToAnchor:self.ProdductionDescriptionLabel.trailingAnchor constant:20]
+    ]];
     
+
 
 }
 
@@ -86,37 +130,32 @@
 - (void)loadWebpage {
     NSString *urlString = self.urlTextField.text;
     
-    // 检查URL是否为空
-    if (urlString.length == 0) {
-        [self showAlertWithTitle:@"Error" message:@"Please enter a URL"];
-        return;
+    NSMutableString *stringM = [NSMutableString stringWithString:urlString];
+    if ([stringM containsString:@"?"]) {
+        [stringM appendFormat:@"&gameid=%@",@"10000"];
+    } else {
+        [stringM appendFormat:@"?gameid=%@",@"10000"];
+    }
+    if (self.ProdductionSwitch.on == YES) {
+        [stringM appendString:@"&c=1"];
+    } else {
+        [stringM appendString:@"&c=0"];
     }
     
-    // 确保URL有协议前缀
-    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
-        urlString = [@"https://" stringByAppendingString:urlString];
+    if (self.vipSwitch.on == YES) {
+        [stringM appendString:@"&v=1"];
+    } else {
+        [stringM appendString:@"&v=0"];
     }
     
     // 创建NSURL对象
     
 
     WebViewViewController *vc = [WebViewViewController new];
-    vc.url = urlString;
+    vc.url = [stringM copy];
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
    
 }
 
-- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
-                                                                   message:message
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
-                                                        style:UIAlertActionStyleDefault
-                                                      handler:nil];
-    [alert addAction:okAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
 
 @end
