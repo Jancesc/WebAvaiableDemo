@@ -195,14 +195,23 @@
 
 - (void)loadWebpage {
     NSString *urlString = self.urlTextField.text;
+    NSString *gameName = self.gameNameTextField.text;
     
     // 检查URL是否为空
     if (urlString.length == 0) {
         [self showAlertWithTitle:@"Error" message:@"Please enter a URL"];
         return;
     }
-    // 保存到历史记录
-    [self saveToHistory:urlString];
+    
+    // 检查游戏名称是否为空
+    if (gameName.length == 0) {
+        [self showAlertWithTitle:@"Error" message:@"Please enter a game name"];
+        return;
+    }
+    
+    // 保存到历史记录（包含游戏名和URL）
+    [self saveToHistory:gameName urlString:urlString];
+    
     NSMutableString *stringM = [NSMutableString stringWithString:urlString];
     if ([stringM containsString:@"?"]) {
         [stringM appendFormat:@"&gameid=%@",@"10000"];
@@ -222,10 +231,7 @@
     }
     
     // 添加游戏名称参数
-    NSString *gameName = self.gameNameTextField.text;
-    if (gameName.length > 0) {
-        [stringM appendFormat:@"&gamename=%@", gameName];
-    }
+    [stringM appendFormat:@"&gamename=%@", gameName];
     
 
     
@@ -234,10 +240,24 @@
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
 }
 
-- (void)saveToHistory:(NSString *)urlString {
-    // 检查是否已存在
-    if (![self.historyArray containsObject:urlString]) {
-        [self.historyArray insertObject:urlString atIndex:0];
+- (void)saveToHistory:(NSString *)gameName urlString:(NSString *)urlString {
+    // 创建包含游戏名和URL的字典
+    NSDictionary *historyItem = @{
+        @"gameName": gameName,
+        @"url": urlString
+    };
+    
+    // 检查是否已存在相同的游戏名
+    BOOL exists = NO;
+    for (NSDictionary *item in self.historyArray) {
+        if ([item[@"gameName"] isEqualToString:gameName]) {
+            exists = YES;
+            break;
+        }
+    }
+    
+    if (!exists) {
+        [self.historyArray insertObject:historyItem atIndex:0];
         
         // 限制历史记录数量为20条
         if (self.historyArray.count > 20) {
@@ -289,13 +309,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryCell" forIndexPath:indexPath];
     
-    NSString *urlString = self.historyArray[indexPath.row];
+    NSDictionary *historyItem = self.historyArray[indexPath.row];
+    NSString *gameName = historyItem[@"gameName"];
+    NSString *urlString = historyItem[@"url"];
     
-    // 提取域名作为显示名称
-    NSString *displayName = [self extractDomainFromURL:urlString];
-    cell.textLabel.text = displayName;
-    cell.textLabel.font = [UIFont systemFontOfSize:14];
-    cell.textLabel.numberOfLines = 2;
+    // 显示游戏名作为主标题
+    cell.textLabel.text = gameName;
+    cell.textLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    cell.textLabel.numberOfLines = 1;
     
     // 显示完整URL作为副标题
     cell.detailTextLabel.text = urlString;
@@ -306,21 +327,17 @@
     return cell;
 }
 
-- (NSString *)extractDomainFromURL:(NSString *)urlString {
-    NSURL *url = [NSURL URLWithString:urlString];
-    if (url && url.host) {
-        return url.host;
-    }
-    return urlString;
-}
-
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *selectedURL = self.historyArray[indexPath.row];
+    NSDictionary *selectedHistoryItem = self.historyArray[indexPath.row];
+    NSString *selectedURL = selectedHistoryItem[@"url"];
+    NSString *selectedGameName = selectedHistoryItem[@"gameName"];
+    
     self.urlTextField.text = selectedURL;
+    self.gameNameTextField.text = selectedGameName;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
