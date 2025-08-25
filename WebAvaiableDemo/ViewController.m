@@ -275,10 +275,54 @@
 - (void)loadHistory {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSArray *savedHistory = [defaults objectForKey:@"WebHistory"];
-    if (savedHistory) {
-        self.historyArray = [savedHistory mutableCopy];
-        [self.historyTableView reloadData];
+    
+    if (savedHistory && [savedHistory isKindOfClass:[NSArray class]]) {
+        // 验证数据格式，过滤掉无效的数据
+        NSMutableArray *validHistory = [NSMutableArray array];
+        
+        for (id item in savedHistory) {
+            if ([item isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *dict = (NSDictionary *)item;
+                // 检查是否包含必要的键
+                if (dict[@"gameName"] && dict[@"url"] && 
+                    [dict[@"gameName"] isKindOfClass:[NSString class]] && 
+                    [dict[@"url"] isKindOfClass:[NSString class]]) {
+                    [validHistory addObject:item];
+                }
+            }
+        }
+        
+        self.historyArray = validHistory;
+    } else {
+        // 如果没有保存的历史记录或格式不正确，初始化为空数组
+        self.historyArray = [NSMutableArray array];
     }
+    
+    // 清理无效数据
+    [self cleanupInvalidHistoryData];
+    
+    [self.historyTableView reloadData];
+}
+
+- (void)cleanupInvalidHistoryData {
+    // 清理无效的历史记录数据
+    NSMutableArray *validItems = [NSMutableArray array];
+    
+    for (id item in self.historyArray) {
+        if ([item isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dict = (NSDictionary *)item;
+            if (dict[@"gameName"] && dict[@"url"] && 
+                [dict[@"gameName"] isKindOfClass:[NSString class]] && 
+                [dict[@"url"] isKindOfClass:[NSString class]] &&
+                [dict[@"gameName"] length] > 0 && [dict[@"url"] length] > 0) {
+                [validItems addObject:item];
+            }
+        }
+    }
+    
+    self.historyArray = validItems;
+    [self saveHistory];
+    [self.historyTableView reloadData];
 }
 
 - (void)saveHistory {
@@ -309,9 +353,32 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryCell" forIndexPath:indexPath];
     
-    NSDictionary *historyItem = self.historyArray[indexPath.row];
+    // 边界检查
+    if (indexPath.row >= self.historyArray.count) {
+        cell.textLabel.text = @"Invalid Item";
+        cell.detailTextLabel.text = @"";
+        return cell;
+    }
+    
+    id item = self.historyArray[indexPath.row];
+    
+    // 数据格式验证
+    if (![item isKindOfClass:[NSDictionary class]]) {
+        cell.textLabel.text = @"Invalid Data";
+        cell.detailTextLabel.text = @"";
+        return cell;
+    }
+    
+    NSDictionary *historyItem = (NSDictionary *)item;
     NSString *gameName = historyItem[@"gameName"];
     NSString *urlString = historyItem[@"url"];
+    
+    // 验证必要字段
+    if (!gameName || !urlString || ![gameName isKindOfClass:[NSString class]] || ![urlString isKindOfClass:[NSString class]]) {
+        cell.textLabel.text = @"Invalid Data";
+        cell.detailTextLabel.text = @"";
+        return cell;
+    }
     
     // 显示游戏名作为主标题
     cell.textLabel.text = gameName;
@@ -332,9 +399,26 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSDictionary *selectedHistoryItem = self.historyArray[indexPath.row];
+    // 边界检查
+    if (indexPath.row >= self.historyArray.count) {
+        return;
+    }
+    
+    id item = self.historyArray[indexPath.row];
+    
+    // 数据格式验证
+    if (![item isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    
+    NSDictionary *selectedHistoryItem = (NSDictionary *)item;
     NSString *selectedURL = selectedHistoryItem[@"url"];
     NSString *selectedGameName = selectedHistoryItem[@"gameName"];
+    
+    // 验证必要字段
+    if (!selectedURL || !selectedGameName || ![selectedURL isKindOfClass:[NSString class]] || ![selectedGameName isKindOfClass:[NSString class]]) {
+        return;
+    }
     
     self.urlTextField.text = selectedURL;
     self.gameNameTextField.text = selectedGameName;
