@@ -11,6 +11,7 @@
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *urlTextField;
+@property (nonatomic, strong) UITextField *gameNameTextField;
 @property (nonatomic, strong) UIButton *loadButton;
 @property (nonatomic, strong) UISwitch *vipSwitch;
 @property (nonatomic, strong) UISwitch *ProdductionSwitch;
@@ -59,6 +60,16 @@
     self.urlTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.urlTextField.delegate = self;
     [self.view addSubview:self.urlTextField];
+    
+    // 创建游戏名称输入框
+    self.gameNameTextField = [[UITextField alloc] init];
+    self.gameNameTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    self.gameNameTextField.placeholder = @"Enter Game Name";
+    self.gameNameTextField.borderStyle = UITextBorderStyleRoundedRect;
+    self.gameNameTextField.font = [UIFont systemFontOfSize:14];
+    self.gameNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.gameNameTextField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+    [self.view addSubview:self.gameNameTextField];
     
     // 创建加载按钮
     self.loadButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -122,9 +133,17 @@
         [self.urlTextField.heightAnchor constraintEqualToConstant:44]
     ]];
     
+    // 游戏名称输入框约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.gameNameTextField.topAnchor constraintEqualToAnchor:self.urlTextField.bottomAnchor constant:10],
+        [self.gameNameTextField.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
+        [self.gameNameTextField.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
+        [self.gameNameTextField.heightAnchor constraintEqualToConstant:44]
+    ]];
+    
     // 加载按钮约束
     [NSLayoutConstraint activateConstraints:@[
-        [self.loadButton.topAnchor constraintEqualToAnchor:self.urlTextField.bottomAnchor constant:20],
+        [self.loadButton.topAnchor constraintEqualToAnchor:self.gameNameTextField.bottomAnchor constant:20],
         [self.loadButton.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
         [self.loadButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
         [self.loadButton.heightAnchor constraintEqualToConstant:44]
@@ -200,6 +219,12 @@
         [stringM appendString:@"&v=1"];
     } else {
         [stringM appendString:@"&v=0"];
+    }
+    
+    // 添加游戏名称参数
+    NSString *gameName = self.gameNameTextField.text;
+    if (gameName.length > 0) {
+        [stringM appendFormat:@"&gamename=%@", gameName];
     }
     
 
