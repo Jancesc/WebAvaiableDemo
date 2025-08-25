@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-
+#import <AVFoundation/AVFoundation.h>
 @interface AppDelegate ()
 
 @end
@@ -30,4 +30,10 @@
     return YES;
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    NSError *error = nil;
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:&error];
+}
 @end

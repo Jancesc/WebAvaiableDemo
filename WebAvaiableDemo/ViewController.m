@@ -182,7 +182,8 @@
         [self showAlertWithTitle:@"Error" message:@"Please enter a URL"];
         return;
     }
-    
+    // 保存到历史记录
+    [self saveToHistory:urlString];
     NSMutableString *stringM = [NSMutableString stringWithString:urlString];
     if ([stringM containsString:@"?"]) {
         [stringM appendFormat:@"&gameid=%@",@"10000"];
@@ -201,8 +202,7 @@
         [stringM appendString:@"&v=0"];
     }
     
-    // 保存到历史记录
-    [self saveToHistory:urlString];
+
     
     WebViewViewController *vc = [WebViewViewController new];
     vc.url = [stringM copy];

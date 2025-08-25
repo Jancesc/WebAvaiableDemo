@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script >
+    var xhr = new XMLHttpRequest();
+    xhr.open('get','https://obsartresources.zywxgames.com/new-resources/Users/Jl/Lsf/Cocos/WX/003_zdwydl/005/remote/music/config.af6ab.json');
+    xhr.onload = function(){
+      document.body.innerText = xhr.responseText;
+    }
+    xhr.send(null)
+  </script>
+</body>
+</html>

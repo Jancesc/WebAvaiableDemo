@@ -1,14 +1,15 @@
-//
-//  WebViewViewController.m
-//  WebAvaiableDemo
-//
-//  Created by Jan on 2025/7/28.
-//
 
 #import "WebViewViewController.h"
+#import <WebKit/WebKit.h>
 
-@interface WebViewViewController ()
-@property (nonatomic, strong) WKWebView *DDP_webView;
+
+@interface WebViewViewController ()<WKScriptMessageHandler,WKNavigationDelegate>
+
+
+@property (nonatomic, strong)WKWebView *DDP_webView;
+@property (nonatomic, assign)NSInteger DDP_timeoutInterval;
+@property (nonatomic, assign)CGFloat DDP_isPortrait;
+@property (nonatomic, assign)BOOL DDP_isWebInit;
 
 @end
 
@@ -16,12 +17,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    // 创建WebView
+    //DDConfuse
+    self.DDP_isPortrait = 1;
+    self.DDP_timeoutInterval = 10;
     
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.allowsInlineMediaPlayback = YES;
     [configuration.preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+    // 默认是NO，这个值决定了用内嵌HTML5播放视频还是用本地的全屏控制
+    configuration.allowsInlineMediaPlayback = YES;
+    // 自动播放, 不需要用户采取任何手势开启播放
+    // WKAudiovisualMediaTypeNone 音视频的播放不需要用户手势触发, 即为自动播放
+    configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+    configuration.allowsAirPlayForMediaPlayback = YES;
+    configuration.allowsPictureInPictureMediaPlayback = YES;
+    
     configuration.userContentController = [WKUserContentController new];
     self.DDP_webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
     [configuration.userContentController addScriptMessageHandler:self name:@"ZKWK"];
@@ -31,42 +41,162 @@
     self.DDP_webView .backgroundColor = bgColor;
     //DDConfuse
     self.DDP_webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-//    self.DDP_webView.inspectable = YES;
     //DDConfuse
     [self.view addSubview:self.DDP_webView];
    
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 
-    [self.view addSubview:self.DDP_webView];
+    [self FDD_loadRequest];
+    [self FDD_updateWebviewFrame];
+ 
+    if (@available(iOS 16.4, *)) {
+        self.DDP_webView.inspectable = YES;
+    } else {
+        // Fallback on earlier versions
+    }
+
     
-    // WebView约束
-    [NSLayoutConstraint activateConstraints:@[
-        [self.DDP_webView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-        [self.DDP_webView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [self.DDP_webView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [self.DDP_webView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
-    ]];
-    [self loadWebpage];
+    //DDConfuse
+
+
+    
+
+
+}
+
+- (void)FDD_BecomeActive {
+    //DDConfuse
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *jsString = [NSString stringWithFormat:@"intoforeground();"];
+        [self FDD_OCCallToJSWithString:jsString];
+    });
 }
 
 
-- (void)loadWebpage {
+- (void)FDD_EnterBackground {
+    //DDConfuse
+    NSString *jsString = [NSString stringWithFormat:@"intobackground();"];
+    [self FDD_OCCallToJSWithString:jsString];
+}
 
-    
-    // 创建NSURL对象
-    NSURL *url = [NSURL URLWithString:self.url];
-    
+-(void)dealloc {
+    //DDConfuse
 
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+
+- (void)FDD_updateWebviewFrame {
+    //DDConfuse
     
-    // 创建URL请求并加载
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    self.DDP_webView.frame = bounds;
+
+}
+
+
+
+-(void)FDD_showTips:(NSString *)tips XSNTC_stable:(BOOL) stable{
+
+    //DDConfuse
+    UIView *view = self.view;
+    UILabel *tipsLabel = [view viewWithTag:110];
+       
+    if (tipsLabel == nil) {
+               
+        tipsLabel = [UILabel new];
+        tipsLabel.tag = 110;
+        tipsLabel.alpha = 0;
+        tipsLabel.textColor = [UIColor whiteColor];
+        tipsLabel.textAlignment = NSTextAlignmentCenter;
+        tipsLabel.font = [UIFont systemFontOfSize:18];
+        tipsLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+        tipsLabel.layer.cornerRadius = 5.f;
+        tipsLabel.clipsToBounds = YES;
+        tipsLabel.numberOfLines = 0;
+        [view addSubview:tipsLabel];
+    }
+        
+    //DDConfuse
+    tipsLabel.text = tips;
+    CGSize size = [tips boundingRectWithSize:CGSizeMake(275, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : tipsLabel.font} context:nil].size;
+    if (size.width < 50) {
+        
+        size.width = 50;
+    }
+    
+    if (size.height < 30) {
+        
+        size.height = 30;
+    }
+    CGRect frame = tipsLabel.frame;
+    frame.size.width = size.width + 20;
+    frame.size.height = size.height + 10;
+    tipsLabel.frame = frame;
+    tipsLabel.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
+//DDConfuse
+    tipsLabel.alpha = 1;
+    [tipsLabel.superview bringSubviewToFront:tipsLabel];
+    if (stable == NO) {
+        [UIView animateWithDuration:1.5 delay:1.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+           
+            tipsLabel.alpha = 0;
+        } completion:^(BOOL finished) {
+            //DDConfuse
+        }];
+    }
+}
+
+- (void)FDD_loadRequest {
+
+
+    //DDConfuse
+    NSMutableString *stringM = [NSMutableString stringWithString:self.url];
+
+    NSURL *baseURL = [NSURL URLWithString:[stringM copy]];
+    //DDConfuse
+    NSURLRequest *request = [NSURLRequest requestWithURL:baseURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.DDP_timeoutInterval];
     [self.DDP_webView loadRequest:request];
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((self.DDP_timeoutInterval+0.5) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if (self.DDP_isWebInit == NO) {
+            //DDConfuse
+            if (self.DDP_timeoutInterval < 15) {
+                self.DDP_timeoutInterval = self.DDP_timeoutInterval+2;
+            }
+            [self FDD_loadRequest];
+        }
+    });
+}
+
+- (void)viewDidLayoutSubviews {
+    //DDConfuse
+    [super viewDidLayoutSubviews];
+    [self FDD_updateWebviewFrame];
 
 }
-- (BOOL)prefersStatusBarHidden {
-    return  YES;
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    //DDConfuse
+
+    return UIStatusBarStyleDefault;
 }
+
+- (BOOL)prefersStatusBarHidden {
+    //DDConfuse
+
+    return YES;
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    //DDConfuse
+
+    return YES;
+}
+
+#pragma mark - JS调Objective-C
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     
@@ -89,39 +219,34 @@
         [self FDD_openSafari:path];
 
     } else if ([name isEqualToString:@"inset"]) {
-        NSString *top = dict[@"data"][@"top"];
-        NSString *bottom = dict[@"data"][@"bottom"];
-        NSString *left = dict[@"data"][@"left"];
-        NSString *right = dict[@"data"][@"right"];
+        //DDConfuse
+
+        [self FDD_updateWebviewFrame];
     } else if ([name isEqualToString:@"rewardVideo"]) {
-
-        [self FDD_videoDidClose];
-
-
-    } else if ([name isEqualToString:@"updateRewardAdId"]) {
+        if ([self.url containsString:@"v=1"]) {
+            [self FDD_videoShowFinished:YES XSNTC_rewarded:YES];
+        }else {
+            [self FDD_showTips:@"模拟广告..." XSNTC_stable:NO];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self FDD_videoShowFinished:YES XSNTC_rewarded:YES];
+            });
+        }
         
 
+
     }
-}
-
-
-- (void)FDD_videoDidClose {
-    //DDConfuse
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *jsString = [NSString stringWithFormat:@"videoDidClosed();"];
-        [self FDD_OCCallToJSWithString:jsString];
-    });
-
 }
 
 #pragma mark - Objective-C 调 JS
 
 - (void)FDD_OCCallToJSWithString:(NSString *)jsString;{
     //DDConfuse
-    [self.DDP_webView evaluateJavaScript:jsString completionHandler:^(id obj, NSError * _Nullable error) {
-        //DDConfuse
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.DDP_webView evaluateJavaScript:jsString completionHandler:^(id obj, NSError * _Nullable error) {
+            //DDConfuse
+        }];
+    });
+
 }
 
 #pragma mark - methods
@@ -132,14 +257,13 @@
     info = @{
         @"state" : @(1),
         @"data" : @{
-            @"app_version": @"1.0",
-            @"system_version":@"1.0",
-            @"device_name":@"1.0",
-            @"device_id" : @"1.0",
-            @"session_id" : @"1.0",
-            @"app_id" : @"1.0",
-            @"bundle_id" :@"1.0",
-            @"production": @"1.0",
+            @"app_version": @"1.0.0",
+            @"system_version":@"test",
+            @"device_name":@"test",
+            @"device_id" : @"test",
+            @"session_id" : @"test",
+            @"app_id" : @"test",
+            @"bundle_id" : @"test",
         },
         @"msg":@"",
     };
@@ -154,8 +278,9 @@
 
 
 - (void)FDD_onWebInit {
-//    [[ZKWindowModule FDD_sharedInstance] FDD_createNormalAddOneWindow];
     //DDConfuse
+    
+    self.DDP_isWebInit = YES;
 
 }
 
@@ -164,4 +289,42 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:path] options:[NSDictionary dictionary] completionHandler:nil];
 }
 
+
+- (BOOL)shouldAutorotate {
+    //DDConfuse
+
+    return  YES;;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    //DDConfuse
+    return self.DDP_isPortrait ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskLandscape;
+
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    //DDConfuse
+
+    return self.DDP_isPortrait ? UIInterfaceOrientationPortrait : UIInterfaceOrientationLandscapeRight;
+}
+
+
+
+
+
+- (void)FDD_videoShowFinished:(BOOL)success XSNTC_rewarded:(BOOL)rewarded {
+
+    if (rewarded) {
+        NSString *jsString = [NSString stringWithFormat:@"videoDidEarnReward();"];
+        [self FDD_OCCallToJSWithString:jsString];
+    }
+    NSString *jsString1 = [NSString stringWithFormat:@"videoDidClosed();"];
+    [self FDD_OCCallToJSWithString:jsString1];
+
+}
+
+
+
+
 @end
+
