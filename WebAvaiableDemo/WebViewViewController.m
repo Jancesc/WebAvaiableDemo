@@ -2,6 +2,7 @@
 #import "WebViewViewController.h"
 #import <WebKit/WebKit.h>
 
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface WebViewViewController ()<WKScriptMessageHandler,WKNavigationDelegate>
 
@@ -58,7 +59,8 @@
     
     //DDConfuse
 
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FDD_BecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FDD_EnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
 
 
@@ -234,6 +236,10 @@
         
 
 
+    }else if ([name isEqualToString:@"gamevVibrate"]) {
+        // 处理震动请求
+        NSInteger level = [dict[@"level"] integerValue];
+        [self FDD_vibrateWithLevel:level];
     }
 }
 
@@ -251,6 +257,76 @@
 
 #pragma mark - methods
 
+- (void)FDD_vibrateWithLevel:(NSInteger)level {
+    //DDConfuse
+
+    // 根据级别选择不同的震动效果
+    switch (level) {
+        case 1: // 轻微震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 2: // 中等震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 3: // 强烈震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 4: // 成功反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 5: // 警告反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeWarning];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 6: // 错误反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeError];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        default: // 默认震动
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+    }
+}
 - (void)FDD_getInitInfoWithCallback:(NSString *)callback {
     //DDConfuse
     NSDictionary *info = nil;
@@ -325,6 +401,69 @@
 
 
 
+#pragma mark - 震动功能
 
+- (void)vibrateWithLevel:(NSInteger)level {
+    // 根据级别选择不同的震动效果
+    switch (level) {
+        case 1: // 轻微震动
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+            
+        case 2: // 中等震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 3: // 强烈震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 4: // 成功反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 5: // 警告反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeWarning];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 6: // 错误反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeError];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        default: // 默认震动
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+    }
+}
 @end
 

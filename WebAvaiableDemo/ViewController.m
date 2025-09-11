@@ -7,6 +7,7 @@
 
 #import "ViewController.h"
 #import "WebViewViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -84,11 +85,14 @@
     
     // 创建VIP开关
     self.vipSwitch = [[UISwitch alloc] init];
+    [self.vipSwitch setOn:YES];
     self.vipSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.vipSwitch];
     
     // 创建生产环境开关
     self.ProdductionSwitch = [[UISwitch alloc] init];
+    [self.ProdductionSwitch setOn:YES];
+
     self.ProdductionSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.ProdductionSwitch];
     
@@ -190,9 +194,78 @@
 }
 
 - (void)loadButtonTapped:(id)sender {
+//    [self vibrateWithLevel:1];
     [self loadWebpage];
 }
 
+- (void)vibrateWithLevel:(NSInteger)level {
+    // 根据级别选择不同的震动效果
+    switch (level) {
+        case 1: // 轻微震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 2: // 中等震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 3: // 强烈震动
+            if (@available(iOS 13.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
+                [generator prepare];
+                [generator impactOccurred];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 4: // 成功反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 5: // 警告反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeWarning];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        case 6: // 错误反馈震动
+            if (@available(iOS 13.0, *)) {
+                UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+                [generator prepare];
+                [generator notificationOccurred:UINotificationFeedbackTypeError];
+            } else {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            break;
+            
+        default: // 默认震动
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+    }
+}
 - (void)loadWebpage {
     NSString *urlString = self.urlTextField.text;
     NSString *gameName = self.gameNameTextField.text;
@@ -219,9 +292,9 @@
         [stringM appendFormat:@"?gameid=%@",@"10000"];
     }
     if (self.ProdductionSwitch.on == YES) {
-        [stringM appendString:@"&c=1"];
-    } else {
         [stringM appendString:@"&c=0"];
+    } else {
+        [stringM appendString:@"&c=1"];
     }
     
     if (self.vipSwitch.on == YES) {
@@ -435,6 +508,8 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+
+
 
 #pragma mark - UITextFieldDelegate
 
