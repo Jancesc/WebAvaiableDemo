@@ -8,12 +8,14 @@
 #import "ViewController.h"
 #import "WebViewViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import <WebKit/WebKit.h>
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *urlTextField;
 @property (nonatomic, strong) UITextField *gameNameTextField;
 @property (nonatomic, strong) UIButton *loadButton;
+@property (nonatomic, strong) UIButton *clearCacheButton;
 @property (nonatomic, strong) UISwitch *vipSwitch;
 @property (nonatomic, strong) UISwitch *ProdductionSwitch;
 @property (nonatomic, strong) UILabel *vipDescriptionLabel;
@@ -82,6 +84,17 @@
     self.loadButton.titleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
     [self.loadButton addTarget:self action:@selector(loadButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loadButton];
+    
+    // 创建清除缓存按钮
+    self.clearCacheButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.clearCacheButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.clearCacheButton setTitle:@"Clear Cache" forState:UIControlStateNormal];
+    self.clearCacheButton.backgroundColor = [UIColor systemOrangeColor];
+    [self.clearCacheButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.clearCacheButton.layer.cornerRadius = 8;
+    self.clearCacheButton.titleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    [self.clearCacheButton addTarget:self action:@selector(clearCacheButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.clearCacheButton];
     
     // 创建VIP开关
     self.vipSwitch = [[UISwitch alloc] init];
@@ -153,15 +166,23 @@
         [self.loadButton.heightAnchor constraintEqualToConstant:44]
     ]];
     
+    // 清除缓存按钮约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.clearCacheButton.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:10],
+        [self.clearCacheButton.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
+        [self.clearCacheButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20],
+        [self.clearCacheButton.heightAnchor constraintEqualToConstant:44]
+    ]];
+    
     // VIP描述标签约束
     [NSLayoutConstraint activateConstraints:@[
-        [self.vipDescriptionLabel.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
+        [self.vipDescriptionLabel.topAnchor constraintEqualToAnchor:self.clearCacheButton.bottomAnchor constant:20],
         [self.vipDescriptionLabel.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20]
     ]];
     
     // VIP开关约束
     [NSLayoutConstraint activateConstraints:@[
-        [self.vipSwitch.topAnchor constraintEqualToAnchor:self.loadButton.bottomAnchor constant:20],
+        [self.vipSwitch.topAnchor constraintEqualToAnchor:self.clearCacheButton.bottomAnchor constant:20],
         [self.vipSwitch.leadingAnchor constraintEqualToAnchor:self.vipDescriptionLabel.trailingAnchor constant:20]
     ]];
     
@@ -196,6 +217,35 @@
 - (void)loadButtonTapped:(id)sender {
 //    [self vibrateWithLevel:1];
     [self loadWebpage];
+}
+
+- (void)clearCacheButtonTapped:(id)sender {
+    [self clearWebViewCache];
+}
+
+- (void)clearWebViewCache {
+    // 清除WKWebView的缓存
+    NSSet *websiteDataTypes = [NSSet setWithArray:@[
+        WKWebsiteDataTypeDiskCache,
+        WKWebsiteDataTypeMemoryCache,
+        WKWebsiteDataTypeOfflineWebApplicationCache,
+        WKWebsiteDataTypeLocalStorage,
+        WKWebsiteDataTypeSessionStorage,
+        WKWebsiteDataTypeWebSQLDatabases,
+        WKWebsiteDataTypeIndexedDBDatabases,
+        WKWebsiteDataTypeCookies
+    ]];
+    
+    NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
+    
+    [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes
+                                               modifiedSince:dateFrom
+                                           completionHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showAlertWithTitle:@"Success" message:@"WebView cache cleared successfully"];
+            [self vibrateWithLevel:4]; // 成功反馈震动
+        });
+    }];
 }
 
 - (void)vibrateWithLevel:(NSInteger)level {
