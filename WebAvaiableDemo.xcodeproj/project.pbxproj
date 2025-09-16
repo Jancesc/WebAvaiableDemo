@@ -6,8 +6,86 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3D8979462E78226F0044F07A /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3D8979452E78226F0044F07A /* bg.mp3 */; };
+		3D8979482E7823380044F07A /* audio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3D8979472E7823380044F07A /* audio.mp3 */; };
+		3D8979FC2E784D860044F07A /* ZKLocalServerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979CE2E784D860044F07A /* ZKLocalServerModule.m */; };
+		3D8979FD2E784D860044F07A /* ZKServerGZipDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979E22E784D860044F07A /* ZKServerGZipDecoder.m */; };
+		3D8979FE2E784D860044F07A /* ZKServerErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979DA2E784D860044F07A /* ZKServerErrorResponse.m */; };
+		3D8979FF2E784D860044F07A /* ZKServerDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979D82E784D860044F07A /* ZKServerDataResponse.m */; };
+		3D897A002E784D860044F07A /* ZKServerMultiPartArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979ED2E784D860044F07A /* ZKServerMultiPartArgument.m */; };
+		3D897A012E784D860044F07A /* ZKServerBodyDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979D02E784D860044F07A /* ZKServerBodyDecoder.m */; };
+		3D897A022E784D860044F07A /* ZKServerGZipEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979E42E784D860044F07A /* ZKServerGZipEncoder.m */; };
+		3D897A032E784D860044F07A /* ZKServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979F82E784D860044F07A /* ZKServerStreamedResponse.m */; };
+		3D897A042E784D860044F07A /* ZKServerURLEncodedFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979FA2E784D860044F07A /* ZKServerURLEncodedFormRequest.m */; };
+		3D897A052E784D860044F07A /* ZKServerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979E92E784D860044F07A /* ZKServerModule.m */; };
+		3D897A062E784D860044F07A /* ZKServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979F62E784D860044F07A /* ZKServerResponse.m */; };
+		3D897A072E784D860044F07A /* ZKServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979DC2E784D860044F07A /* ZKServerFileRequest.m */; };
+		3D897A082E784D860044F07A /* ZKServerMultiPartFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979EF2E784D860044F07A /* ZKServerMultiPartFile.m */; };
+		3D897A092E784D860044F07A /* ZKServerMultiPart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979EB2E784D860044F07A /* ZKServerMultiPart.m */; };
+		3D897A0A2E784D860044F07A /* ZKServerFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979DE2E784D860044F07A /* ZKServerFileResponse.m */; };
+		3D897A0B2E784D860044F07A /* ZKServerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979E02E784D860044F07A /* ZKServerFunctions.m */; };
+		3D897A0C2E784D860044F07A /* ZKServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979D62E784D860044F07A /* ZKServerDataRequest.m */; };
+		3D897A0D2E784D860044F07A /* ZKServerMIMEStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979E72E784D860044F07A /* ZKServerMIMEStreamParser.m */; };
+		3D897A0E2E784D860044F07A /* ZKServerMultiPartFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979F12E784D860044F07A /* ZKServerMultiPartFormRequest.m */; };
+		3D897A0F2E784D860044F07A /* ZKServerBodyEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979D22E784D860044F07A /* ZKServerBodyEncoder.m */; };
+		3D897A102E784D860044F07A /* ZKServerRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979F42E784D860044F07A /* ZKServerRequest.m */; };
+		3D897A112E784D860044F07A /* ZKServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8979D42E784D860044F07A /* ZKServerConnection.m */; };
+		3D897A132E784EDA0044F07A /* mobile.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D897A122E784EDA0044F07A /* mobile.bundle */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3D292EB92E3757AD00FB8D8A /* WebAvaiableDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebAvaiableDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D8979452E78226F0044F07A /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
+		3D8979472E7823380044F07A /* audio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audio.mp3; sourceTree = "<group>"; };
+		3D8979CC2E784D860044F07A /* ZKHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKHeader.h; sourceTree = "<group>"; };
+		3D8979CD2E784D860044F07A /* ZKLocalServerModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKLocalServerModule.h; sourceTree = "<group>"; };
+		3D8979CE2E784D860044F07A /* ZKLocalServerModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKLocalServerModule.m; sourceTree = "<group>"; };
+		3D8979CF2E784D860044F07A /* ZKServerBodyDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerBodyDecoder.h; sourceTree = "<group>"; };
+		3D8979D02E784D860044F07A /* ZKServerBodyDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerBodyDecoder.m; sourceTree = "<group>"; };
+		3D8979D12E784D860044F07A /* ZKServerBodyEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerBodyEncoder.h; sourceTree = "<group>"; };
+		3D8979D22E784D860044F07A /* ZKServerBodyEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerBodyEncoder.m; sourceTree = "<group>"; };
+		3D8979D32E784D860044F07A /* ZKServerConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerConnection.h; sourceTree = "<group>"; };
+		3D8979D42E784D860044F07A /* ZKServerConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerConnection.m; sourceTree = "<group>"; };
+		3D8979D52E784D860044F07A /* ZKServerDataRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerDataRequest.h; sourceTree = "<group>"; };
+		3D8979D62E784D860044F07A /* ZKServerDataRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerDataRequest.m; sourceTree = "<group>"; };
+		3D8979D72E784D860044F07A /* ZKServerDataResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerDataResponse.h; sourceTree = "<group>"; };
+		3D8979D82E784D860044F07A /* ZKServerDataResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerDataResponse.m; sourceTree = "<group>"; };
+		3D8979D92E784D860044F07A /* ZKServerErrorResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerErrorResponse.h; sourceTree = "<group>"; };
+		3D8979DA2E784D860044F07A /* ZKServerErrorResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerErrorResponse.m; sourceTree = "<group>"; };
+		3D8979DB2E784D860044F07A /* ZKServerFileRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerFileRequest.h; sourceTree = "<group>"; };
+		3D8979DC2E784D860044F07A /* ZKServerFileRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerFileRequest.m; sourceTree = "<group>"; };
+		3D8979DD2E784D860044F07A /* ZKServerFileResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerFileResponse.h; sourceTree = "<group>"; };
+		3D8979DE2E784D860044F07A /* ZKServerFileResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerFileResponse.m; sourceTree = "<group>"; };
+		3D8979DF2E784D860044F07A /* ZKServerFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerFunctions.h; sourceTree = "<group>"; };
+		3D8979E02E784D860044F07A /* ZKServerFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerFunctions.m; sourceTree = "<group>"; };
+		3D8979E12E784D860044F07A /* ZKServerGZipDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerGZipDecoder.h; sourceTree = "<group>"; };
+		3D8979E22E784D860044F07A /* ZKServerGZipDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerGZipDecoder.m; sourceTree = "<group>"; };
+		3D8979E32E784D860044F07A /* ZKServerGZipEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerGZipEncoder.h; sourceTree = "<group>"; };
+		3D8979E42E784D860044F07A /* ZKServerGZipEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerGZipEncoder.m; sourceTree = "<group>"; };
+		3D8979E52E784D860044F07A /* ZKServerHTTPStatusCodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerHTTPStatusCodes.h; sourceTree = "<group>"; };
+		3D8979E62E784D860044F07A /* ZKServerMIMEStreamParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerMIMEStreamParser.h; sourceTree = "<group>"; };
+		3D8979E72E784D860044F07A /* ZKServerMIMEStreamParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerMIMEStreamParser.m; sourceTree = "<group>"; };
+		3D8979E82E784D860044F07A /* ZKServerModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerModule.h; sourceTree = "<group>"; };
+		3D8979E92E784D860044F07A /* ZKServerModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerModule.m; sourceTree = "<group>"; };
+		3D8979EA2E784D860044F07A /* ZKServerMultiPart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerMultiPart.h; sourceTree = "<group>"; };
+		3D8979EB2E784D860044F07A /* ZKServerMultiPart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerMultiPart.m; sourceTree = "<group>"; };
+		3D8979EC2E784D860044F07A /* ZKServerMultiPartArgument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerMultiPartArgument.h; sourceTree = "<group>"; };
+		3D8979ED2E784D860044F07A /* ZKServerMultiPartArgument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerMultiPartArgument.m; sourceTree = "<group>"; };
+		3D8979EE2E784D860044F07A /* ZKServerMultiPartFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerMultiPartFile.h; sourceTree = "<group>"; };
+		3D8979EF2E784D860044F07A /* ZKServerMultiPartFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerMultiPartFile.m; sourceTree = "<group>"; };
+		3D8979F02E784D860044F07A /* ZKServerMultiPartFormRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerMultiPartFormRequest.h; sourceTree = "<group>"; };
+		3D8979F12E784D860044F07A /* ZKServerMultiPartFormRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerMultiPartFormRequest.m; sourceTree = "<group>"; };
+		3D8979F22E784D860044F07A /* ZKServerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerPrivate.h; sourceTree = "<group>"; };
+		3D8979F32E784D860044F07A /* ZKServerRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerRequest.h; sourceTree = "<group>"; };
+		3D8979F42E784D860044F07A /* ZKServerRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerRequest.m; sourceTree = "<group>"; };
+		3D8979F52E784D860044F07A /* ZKServerResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerResponse.h; sourceTree = "<group>"; };
+		3D8979F62E784D860044F07A /* ZKServerResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerResponse.m; sourceTree = "<group>"; };
+		3D8979F72E784D860044F07A /* ZKServerStreamedResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerStreamedResponse.h; sourceTree = "<group>"; };
+		3D8979F82E784D860044F07A /* ZKServerStreamedResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerStreamedResponse.m; sourceTree = "<group>"; };
+		3D8979F92E784D860044F07A /* ZKServerURLEncodedFormRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKServerURLEncodedFormRequest.h; sourceTree = "<group>"; };
+		3D8979FA2E784D860044F07A /* ZKServerURLEncodedFormRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKServerURLEncodedFormRequest.m; sourceTree = "<group>"; };
+		3D897A122E784EDA0044F07A /* mobile.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mobile.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +123,10 @@
 		3D292EB02E3757AD00FB8D8A = {
 			isa = PBXGroup;
 			children = (
+				3D897A122E784EDA0044F07A /* mobile.bundle */,
+				3D8979FB2E784D860044F07A /* XSLocalServerSDK */,
+				3D8979472E7823380044F07A /* audio.mp3 */,
+				3D8979452E78226F0044F07A /* bg.mp3 */,
 				3D292EBB2E3757AD00FB8D8A /* WebAvaiableDemo */,
 				3D292EBA2E3757AD00FB8D8A /* Products */,
 			);
@@ -56,6 +138,60 @@
 				3D292EB92E3757AD00FB8D8A /* WebAvaiableDemo.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3D8979FB2E784D860044F07A /* XSLocalServerSDK */ = {
+			isa = PBXGroup;
+			children = (
+				3D8979CC2E784D860044F07A /* ZKHeader.h */,
+				3D8979CD2E784D860044F07A /* ZKLocalServerModule.h */,
+				3D8979CE2E784D860044F07A /* ZKLocalServerModule.m */,
+				3D8979CF2E784D860044F07A /* ZKServerBodyDecoder.h */,
+				3D8979D02E784D860044F07A /* ZKServerBodyDecoder.m */,
+				3D8979D12E784D860044F07A /* ZKServerBodyEncoder.h */,
+				3D8979D22E784D860044F07A /* ZKServerBodyEncoder.m */,
+				3D8979D32E784D860044F07A /* ZKServerConnection.h */,
+				3D8979D42E784D860044F07A /* ZKServerConnection.m */,
+				3D8979D52E784D860044F07A /* ZKServerDataRequest.h */,
+				3D8979D62E784D860044F07A /* ZKServerDataRequest.m */,
+				3D8979D72E784D860044F07A /* ZKServerDataResponse.h */,
+				3D8979D82E784D860044F07A /* ZKServerDataResponse.m */,
+				3D8979D92E784D860044F07A /* ZKServerErrorResponse.h */,
+				3D8979DA2E784D860044F07A /* ZKServerErrorResponse.m */,
+				3D8979DB2E784D860044F07A /* ZKServerFileRequest.h */,
+				3D8979DC2E784D860044F07A /* ZKServerFileRequest.m */,
+				3D8979DD2E784D860044F07A /* ZKServerFileResponse.h */,
+				3D8979DE2E784D860044F07A /* ZKServerFileResponse.m */,
+				3D8979DF2E784D860044F07A /* ZKServerFunctions.h */,
+				3D8979E02E784D860044F07A /* ZKServerFunctions.m */,
+				3D8979E12E784D860044F07A /* ZKServerGZipDecoder.h */,
+				3D8979E22E784D860044F07A /* ZKServerGZipDecoder.m */,
+				3D8979E32E784D860044F07A /* ZKServerGZipEncoder.h */,
+				3D8979E42E784D860044F07A /* ZKServerGZipEncoder.m */,
+				3D8979E52E784D860044F07A /* ZKServerHTTPStatusCodes.h */,
+				3D8979E62E784D860044F07A /* ZKServerMIMEStreamParser.h */,
+				3D8979E72E784D860044F07A /* ZKServerMIMEStreamParser.m */,
+				3D8979E82E784D860044F07A /* ZKServerModule.h */,
+				3D8979E92E784D860044F07A /* ZKServerModule.m */,
+				3D8979EA2E784D860044F07A /* ZKServerMultiPart.h */,
+				3D8979EB2E784D860044F07A /* ZKServerMultiPart.m */,
+				3D8979EC2E784D860044F07A /* ZKServerMultiPartArgument.h */,
+				3D8979ED2E784D860044F07A /* ZKServerMultiPartArgument.m */,
+				3D8979EE2E784D860044F07A /* ZKServerMultiPartFile.h */,
+				3D8979EF2E784D860044F07A /* ZKServerMultiPartFile.m */,
+				3D8979F02E784D860044F07A /* ZKServerMultiPartFormRequest.h */,
+				3D8979F12E784D860044F07A /* ZKServerMultiPartFormRequest.m */,
+				3D8979F22E784D860044F07A /* ZKServerPrivate.h */,
+				3D8979F32E784D860044F07A /* ZKServerRequest.h */,
+				3D8979F42E784D860044F07A /* ZKServerRequest.m */,
+				3D8979F52E784D860044F07A /* ZKServerResponse.h */,
+				3D8979F62E784D860044F07A /* ZKServerResponse.m */,
+				3D8979F72E784D860044F07A /* ZKServerStreamedResponse.h */,
+				3D8979F82E784D860044F07A /* ZKServerStreamedResponse.m */,
+				3D8979F92E784D860044F07A /* ZKServerURLEncodedFormRequest.h */,
+				3D8979FA2E784D860044F07A /* ZKServerURLEncodedFormRequest.m */,
+			);
+			path = XSLocalServerSDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,6 +257,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D8979462E78226F0044F07A /* bg.mp3 in Resources */,
+				3D897A132E784EDA0044F07A /* mobile.bundle in Resources */,
+				3D8979482E7823380044F07A /* audio.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +270,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D8979FC2E784D860044F07A /* ZKLocalServerModule.m in Sources */,
+				3D8979FD2E784D860044F07A /* ZKServerGZipDecoder.m in Sources */,
+				3D8979FE2E784D860044F07A /* ZKServerErrorResponse.m in Sources */,
+				3D8979FF2E784D860044F07A /* ZKServerDataResponse.m in Sources */,
+				3D897A002E784D860044F07A /* ZKServerMultiPartArgument.m in Sources */,
+				3D897A012E784D860044F07A /* ZKServerBodyDecoder.m in Sources */,
+				3D897A022E784D860044F07A /* ZKServerGZipEncoder.m in Sources */,
+				3D897A032E784D860044F07A /* ZKServerStreamedResponse.m in Sources */,
+				3D897A042E784D860044F07A /* ZKServerURLEncodedFormRequest.m in Sources */,
+				3D897A052E784D860044F07A /* ZKServerModule.m in Sources */,
+				3D897A062E784D860044F07A /* ZKServerResponse.m in Sources */,
+				3D897A072E784D860044F07A /* ZKServerFileRequest.m in Sources */,
+				3D897A082E784D860044F07A /* ZKServerMultiPartFile.m in Sources */,
+				3D897A092E784D860044F07A /* ZKServerMultiPart.m in Sources */,
+				3D897A0A2E784D860044F07A /* ZKServerFileResponse.m in Sources */,
+				3D897A0B2E784D860044F07A /* ZKServerFunctions.m in Sources */,
+				3D897A0C2E784D860044F07A /* ZKServerDataRequest.m in Sources */,
+				3D897A0D2E784D860044F07A /* ZKServerMIMEStreamParser.m in Sources */,
+				3D897A0E2E784D860044F07A /* ZKServerMultiPartFormRequest.m in Sources */,
+				3D897A0F2E784D860044F07A /* ZKServerBodyEncoder.m in Sources */,
+				3D897A102E784D860044F07A /* ZKServerRequest.m in Sources */,
+				3D897A112E784D860044F07A /* ZKServerConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,9 +317,8 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -197,9 +357,8 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -2,7 +2,8 @@
 #import "WebViewViewController.h"
 #import <WebKit/WebKit.h>
 
-#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
+
 
 @interface WebViewViewController ()<WKScriptMessageHandler,WKNavigationDelegate>
 
@@ -23,7 +24,6 @@
     self.DDP_timeoutInterval = 10;
     
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    configuration.allowsInlineMediaPlayback = YES;
     [configuration.preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
     // 默认是NO，这个值决定了用内嵌HTML5播放视频还是用本地的全屏控制
     configuration.allowsInlineMediaPlayback = YES;
@@ -68,7 +68,10 @@
 
 - (void)FDD_BecomeActive {
     //DDConfuse
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
+        
+    });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *jsString = [NSString stringWithFormat:@"intoforeground();"];
         [self FDD_OCCallToJSWithString:jsString];
@@ -161,16 +164,7 @@
     //DDConfuse
     NSURLRequest *request = [NSURLRequest requestWithURL:baseURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.DDP_timeoutInterval];
     [self.DDP_webView loadRequest:request];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((self.DDP_timeoutInterval+0.5) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        if (self.DDP_isWebInit == NO) {
-            //DDConfuse
-            if (self.DDP_timeoutInterval < 15) {
-                self.DDP_timeoutInterval = self.DDP_timeoutInterval+2;
-            }
-            [self FDD_loadRequest];
-        }
-    });
+
 }
 
 - (void)viewDidLayoutSubviews {

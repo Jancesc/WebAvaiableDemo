@@ -45,6 +45,10 @@
     
     // 加载历史记录
     [self loadHistory];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadWebpage];
+
+    });
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -317,20 +321,11 @@
     }
 }
 - (void)loadWebpage {
-    NSString *urlString = self.urlTextField.text;
+    
+    NSString *urlString = @"http://localhost:2000/index.html";
     NSString *gameName = self.gameNameTextField.text;
     
-    // 检查URL是否为空
-    if (urlString.length == 0) {
-        [self showAlertWithTitle:@"Error" message:@"Please enter a URL"];
-        return;
-    }
-    
-    // 检查游戏名称是否为空
-    if (gameName.length == 0) {
-        [self showAlertWithTitle:@"Error" message:@"Please enter a game name"];
-        return;
-    }
+
     
     // 保存到历史记录（包含游戏名和URL）
     [self saveToHistory:gameName urlString:urlString];
